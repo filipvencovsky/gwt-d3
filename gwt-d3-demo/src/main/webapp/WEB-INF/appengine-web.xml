@@ -31,7 +31,7 @@
 -->
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
     <application>gwt-d3</application>
-    <version>hourly</version>
+    <version>1</version>
     <threadsafe>true</threadsafe>
 
     <system-properties>
