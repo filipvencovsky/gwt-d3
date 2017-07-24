@@ -223,7 +223,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @param <T>
      */
-    public static class Link<T> extends JavaScriptObject {
+    public static class Link<T,L> extends JavaScriptObject {
         protected Link() {
             super();
         }
@@ -236,7 +236,7 @@ public class Force<T, L> extends JavaScriptObject {
          * @param the ending coordinates
          * @return the link object
          */
-        public static final native <T> Link<T> create(T source, T target) /*-{
+        public static final native <T,L> Link<T,L> create(T source, T target) /*-{
 			return {
 				source : source,
 				target : target
@@ -255,6 +255,20 @@ public class Force<T, L> extends JavaScriptObject {
          */
         public final native Node<T> source() /*-{
 			return this.source;
+        }-*/;
+        
+        /**
+         * @return link datum
+         */
+        public final native L datum() /*-{
+			return this.datum;
+        }-*/;
+
+        /**
+         * @param datum the user datum of this node
+         */
+        public final native void datum(final L datum)/*-{
+			this.datum = datum;
         }-*/;
     }
 
@@ -594,9 +608,25 @@ public class Force<T, L> extends JavaScriptObject {
 		return this.nodes(nodes);
     }-*/;
     
-    public final native Array<Link<T>> linksFromData(final Array<L> data) /*-{
-		this.links(data);
-	
+    /**
+     * data must contain source and target node references
+     * a node reference means position of a node in the data input definition, first node has number 0  
+     * 
+     * @param data
+     * @return
+     */
+    public final native Array<Link<T,L>> linksFromData(final Array<L> data) /*-{
+		
+		finalLinks = [];    	
+		for(i = 0; i < data.length; i++) { 
+			finalLinks[i] = {
+				datum: data[i],
+				source: data[i].source,
+				target: data[i].target
+			}
+		}
+		this.links(finalLinks);
+
 		return this.links()
 	}-*/;
 
@@ -604,7 +634,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the links current array, which defaults to the empty array.
      */
-    public final native Array<Link<T>> links() /*-{
+    public final native Array<Link<T,L>> links() /*-{
 		return this.links();
     }-*/;
 
@@ -618,7 +648,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> links(Array<Link<T>> links) /*-{
+    public final native Force<T, L> links(Array<Link<T,L>> links) /*-{
 		return this.links(links);
     }-*/;
     

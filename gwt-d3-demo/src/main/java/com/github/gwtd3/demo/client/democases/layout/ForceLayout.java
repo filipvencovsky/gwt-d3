@@ -166,25 +166,25 @@ public class ForceLayout extends FlowPanel implements DemoCase {
 			    	  	.attr("x1", new DatumFunction<String>() {
 	                          @Override
 	                          public String apply(final Element context, final Value value, final int index) {
-	                              return String.valueOf(value.<Force.Link<GraphNode>> as().source().x());
+	                              return String.valueOf(value.<Force.Link<GraphNode, GraphLink>> as().source().x());
 	                          }
 	                      })
 			    	  	.attr("y1", new DatumFunction<String>() {
 	                          @Override
 	                          public String apply(final Element context, final Value value, final int index) {
-	                              return String.valueOf(value.<Force.Link<GraphNode>> as().source().y());
+	                              return String.valueOf(value.<Force.Link<GraphNode, GraphLink>> as().source().y());
 	                          }
 	                      })
 			    	  	.attr("x2", new DatumFunction<String>() {
 	                          @Override
 	                          public String apply(final Element context, final Value value, final int index) {
-	                              return String.valueOf(value.<Force.Link<GraphNode>> as().target().x());
+	                              return String.valueOf(value.<Force.Link<GraphNode, GraphLink>> as().target().x());
 	                          }
 	                      })
 			    	  	.attr("y2", new DatumFunction<String>() {
 	                          @Override
 	                          public String apply(final Element context, final Value value, final int index) {
-	                              return String.valueOf(value.<Force.Link<GraphNode>> as().target().y());
+	                              return String.valueOf(value.<Force.Link<GraphNode, GraphLink>> as().target().y());
 	                          }
 	                      });
 
@@ -215,18 +215,26 @@ public class ForceLayout extends FlowPanel implements DemoCase {
                        
                         Array<Force.Node<GraphNode>> nodes = force.nodesFromData(root.nodes());
                         GWT.log(String.valueOf("nodes: "+nodes.length()));  
-                        Array<Force.Link<GraphNode>> links = force.linksFromData(root.links());
+                        Array<Force.Link<GraphNode, GraphLink>> links = force.linksFromData(root.links());
                         GWT.log(String.valueOf("links: "+links.length()));
                         //TODO: nesou hrany informace?
                         //TODO: jak zobrazit informace z hran?
                         
                         force.start();
+                        
+                        double widthConst = 0.1; 
 
                         Selection link = svg.selectAll("." + css.link())
 //                                .data(root.links())
                                 .data(links)
                                 .enter().append("line")                                
-                                .attr("class", css.link());
+                                .attr("class", css.link())
+                                .attr("stroke-width", new DatumFunction<String>() {
+                                    @Override
+                                    public String apply(final Element context, final Value d, final int index) {
+                                        return String.valueOf(d.<Force.Link<GraphNode, GraphLink>> as().datum().value()*widthConst);
+                                    }
+                                });
 
                         Selection node = svg.selectAll("." + css.node())
                                 .data(nodes)
