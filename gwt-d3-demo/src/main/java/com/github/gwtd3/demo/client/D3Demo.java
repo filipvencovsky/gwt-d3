@@ -43,6 +43,7 @@ import com.github.gwtd3.demo.client.democases.geom.HullDemo;
 import com.github.gwtd3.demo.client.democases.geom.MitchellBestCandidate;
 import com.github.gwtd3.demo.client.democases.geom.VoronoiTessellationDemo;
 import com.github.gwtd3.demo.client.democases.layout.ClusterDendogram;
+import com.github.gwtd3.demo.client.democases.layout.ForceLayout;
 import com.github.gwtd3.demo.client.democases.layout.RadialReingoldTilfordTree;
 import com.github.gwtd3.demo.client.democases.svg.LineDemo;
 import com.github.gwtd3.demo.client.democases.svg.SymbolDemo;
@@ -130,6 +131,7 @@ public class D3Demo implements EntryPoint {
         buttonContainer.add(new DemoButton("Zoom", ZoomDemo.factory()));
 
         buttonContainer.add(new DemoButton("Cluster Dendogram", ClusterDendogram.factory()));
+        buttonContainer.add(new DemoButton("Force Layout", ForceLayout.factory()));
         buttonContainer.add(new DemoButton("Radial Reingold–Tilford Tree", RadialReingoldTilfordTree.factory()));
         // BRUSHES
         buttonContainer.add(new DemoButton("Brush As Slider", BrushAsSliderDemo.factory()));

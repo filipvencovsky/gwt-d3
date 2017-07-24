@@ -28,6 +28,7 @@
  */
 package com.github.gwtd3.api.layout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.gwtd3.api.arrays.Array;
@@ -63,7 +64,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  *
  * @param <T> the type of datum of each node
  */
-public class Force<T> extends JavaScriptObject {
+public class Force<T, L> extends JavaScriptObject {
 
     /**
      * Type of force event for {@link Force#on(ForceEventType, DatumFunction)} method.
@@ -72,7 +73,7 @@ public class Force<T> extends JavaScriptObject {
         START,
         END,
         TICK;
-    }
+    }       
 
     /**
      * A node in d3j's force layout, see <a
@@ -279,7 +280,7 @@ public class Force<T> extends JavaScriptObject {
      *            to set
      * @return the force layout object.
      */
-    public final native Force<T> size(Array<Double> size) /*-{
+    public final native Force<T, L> size(Array<Double> size) /*-{
 		return this.size(size);
     }-*/;
 
@@ -295,7 +296,7 @@ public class Force<T> extends JavaScriptObject {
      * @param height
      * @return the force layout object.
      */
-    public final native Force<T> size(double width, double height) /*-{
+    public final native Force<T, L> size(double width, double height) /*-{
 		return this.size([ width, height ]);
     }-*/;
 
@@ -315,7 +316,7 @@ public class Force<T> extends JavaScriptObject {
      *            to set
      * @return the force layout object.
      */
-    public final native Force<T> linkDistance(double distance) /*-{
+    public final native Force<T, L> linkDistance(double distance) /*-{
 		return this.linkDistance(distance);
     }-*/;
 
@@ -331,7 +332,7 @@ public class Force<T> extends JavaScriptObject {
      *            document
      * @return the force layout object.
      */
-    public final native Force<T> linkDistance(DatumFunction<Double> callback) /*-{
+    public final native Force<T, L> linkDistance(DatumFunction<Double> callback) /*-{
 		try {
 			return this
 					.linkDistance(function(d, i) {
@@ -360,7 +361,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> linkStrength(double strength) /*-{
+    public final native Force<T, L> linkStrength(double strength) /*-{
 		return this.linkStrength(strength);
     }-*/;
 
@@ -373,7 +374,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> linkStrength(DatumFunction<Double> callback) /*-{
+    public final native Force<T, L> linkStrength(DatumFunction<Double> callback) /*-{
 		try {
 			return this
 					.linkStrength(function(d, i) {
@@ -408,7 +409,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> friction(double friction) /*-{
+    public final native Force<T, L> friction(double friction) /*-{
 		return this.friction(friction);
     }-*/;
 
@@ -431,7 +432,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> charge(double x) /*-{
+    public final native Force<T, L> charge(double x) /*-{
 		return this.charge(x);
     }-*/;
 
@@ -451,7 +452,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> charge(DatumFunction<Double> callback) /*-{
+    public final native Force<T, L> charge(DatumFunction<Double> callback) /*-{
 		try {
 			return this
 					.charge(function(d, i) {
@@ -483,7 +484,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> chargeDistance(double x) /*-{
+    public final native Force<T, L> chargeDistance(double x) /*-{
 		return this.chargeDistance(x);
     }-*/;
 
@@ -511,7 +512,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> theta(double x) /*-{
+    public final native Force<T, L> theta(double x) /*-{
 		return this.theta(x);
     }-*/;
 
@@ -543,7 +544,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> gravity(double x) /*-{
+    public final native Force<T, L> gravity(double x) /*-{
 		return this.gravity(x);
     }-*/;
 
@@ -554,6 +555,18 @@ public class Force<T> extends JavaScriptObject {
     public final native Array<Node<T>> nodes() /*-{
 		return this.nodes();
     }-*/;
+    
+    public final native Array<Node<T>> nodesFromData(final Array<T> data) /*-{
+    	finalNodes = [];    	
+		for(i = 0; i < data.length; i++) { 
+			finalNodes[i] = {
+				datum: data[i]
+			}
+		}
+		this.nodes(finalNodes);
+
+		return this.nodes()
+	}-*/;
 
     /**
      * Sets the layout's associated nodes to the specified array.
@@ -564,7 +577,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final Force<T> nodes(final List<Node<T>> nodes) {
+    public final Force<T, L> nodes(final List<Node<T>> nodes) {
         return this.nodes(Array.fromIterable(nodes));
     }
 
@@ -577,9 +590,15 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> nodes(Array<Node<T>> nodes) /*-{
+    public final native Force<T, L> nodes(Array<Node<T>> nodes) /*-{
 		return this.nodes(nodes);
     }-*/;
+    
+    public final native Array<Link<T>> linksFromData(final Array<L> data) /*-{
+		this.links(data);
+	
+		return this.links()
+	}-*/;
 
     /**
      *
@@ -599,9 +618,10 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> links(Array<Link<T>> links) /*-{
+    public final native Force<T, L> links(Array<Link<T>> links) /*-{
 		return this.links(links);
     }-*/;
+    
 
     /**
      * Starts the simulation; this method must be called when the layout is
@@ -631,7 +651,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> start() /*-{
+    public final native Force<T, L> start() /*-{
 		return this.start();
     }-*/;
 
@@ -652,7 +672,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> alpha(double x) /*-{
+    public final native Force<T, L> alpha(double x) /*-{
 		return this.alpha(x);
     }-*/;
 
@@ -672,7 +692,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> resume() /*-{
+    public final native Force<T, L> resume() /*-{
 		return this.resume();
     }-*/;
 
@@ -692,7 +712,7 @@ public class Force<T> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T> stop() /*-{
+    public final native Force<T, L> stop() /*-{
 		return this.stop();
     }-*/;
 
