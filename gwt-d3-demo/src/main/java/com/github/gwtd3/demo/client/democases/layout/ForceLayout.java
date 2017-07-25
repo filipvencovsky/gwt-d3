@@ -33,6 +33,7 @@ import java.util.List;
 
 import com.github.gwtd3.api.D3;
 import com.github.gwtd3.api.arrays.Array;
+import com.github.gwtd3.api.behaviour.Drag;
 import com.github.gwtd3.api.core.Selection;
 import com.github.gwtd3.api.core.Value;
 import com.github.gwtd3.api.functions.DatumFunction;
@@ -136,13 +137,35 @@ public class ForceLayout extends FlowPanel implements DemoCase {
     	}-*/;
         
     }
+    
+    public class OnDragStart implements DatumFunction<Void> {
+
+		@Override
+		public Void apply(final Element context, final Value d, final int index) {
+			D3.select(context).attr("fill", "red");
+			return null;
+		}
+
+	}
+    
+	public class OnDragEnd implements DatumFunction<Void> {
+
+		@Override
+		public Void apply(final Element context, final Value d, final int index) {
+			// remove fill attributes
+			D3.select(context).attr("fill", "");
+			return null;
+		}
+
+	}
 
 	@Override
     public void start() {
         int width = 960;
-        final int height = 500;
+        final int height = 500;              
 
         force = D3.layout().force();
+               
        
         force
         	.size(height, width - 160)
@@ -217,12 +240,15 @@ public class ForceLayout extends FlowPanel implements DemoCase {
                         GWT.log(String.valueOf("nodes: "+nodes.length()));  
                         Array<Force.Link<GraphNode, GraphLink>> links = force.linksFromData(root.links());
                         GWT.log(String.valueOf("links: "+links.length()));
-                        //TODO: nesou hrany informace?
-                        //TODO: jak zobrazit informace z hran?
+                        
+                        Drag drag = force.drag();
+                        drag
+                        	.on(Drag.DragEventType.DRAGSTART, new OnDragStart())
+                        	.on(Drag.DragEventType.DRAGEND, new OnDragEnd());
                         
                         force.start();
                         
-                        double widthConst = 0.1; 
+                        final double widthConst = 0.1; 
 
                         Selection link = svg.selectAll("." + css.link())
 //                                .data(root.links())
@@ -240,9 +266,9 @@ public class ForceLayout extends FlowPanel implements DemoCase {
                                 .data(nodes)
                                 .enter().append("g")
                                 .attr("class", css.node())
-                                .attr("r", 40);
+                                .attr("r", 40)
 //                                .on("dblclick", dblclick) //https://bl.ocks.org/mbostock/3750558 TODO: doubleclick
-//                                .call(drag); //https://bl.ocks.org/mbostock/3750558 TODO: drag and drop
+                                .call(drag); //https://bl.ocks.org/mbostock/3750558 TODO: drag and drop
 
                         node.append("circle")
                                 .attr("r", 4.5);
