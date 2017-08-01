@@ -42,6 +42,7 @@ import com.github.gwtd3.api.layout.Cluster.Node;
 import com.github.gwtd3.api.layout.Force;
 import com.github.gwtd3.api.layout.HierarchicalLayout;
 import com.github.gwtd3.api.layout.HierarchicalLayout.Link;
+import com.github.gwtd3.api.layout.LinkDatum;
 import com.github.gwtd3.api.svg.Diagonal;
 import com.github.gwtd3.demo.client.DemoCase;
 import com.github.gwtd3.demo.client.Factory;
@@ -118,17 +119,17 @@ public class ForceLayout extends FlowPanel implements DemoCase {
         }-*/;
     }
     
-    public static class GraphLink extends JavaScriptObject {
+    public static class GraphLink extends JavaScriptObject implements LinkDatum {
 
         protected GraphLink() {
 
         }
         
-        public final native String source()/*-{
+        public final native int getSourceId()/*-{
     		return this.source;
     	}-*/;
         
-        public final native String target()/*-{
+        public final native int getTargetId()/*-{
 			return this.target;
 		}-*/;
         

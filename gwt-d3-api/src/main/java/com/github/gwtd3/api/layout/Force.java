@@ -64,7 +64,7 @@ import com.google.gwt.core.client.JavaScriptObject;
  *
  * @param <T> the type of datum of each node
  */
-public class Force<T, L> extends JavaScriptObject {
+public class Force<T, LinkDatum> extends JavaScriptObject {
 
     /**
      * Type of force event for {@link Force#on(ForceEventType, DatumFunction)} method.
@@ -223,7 +223,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @param <T>
      */
-    public static class Link<T,L> extends JavaScriptObject {
+    public static class Link<T,LinkDatum> extends JavaScriptObject {
         protected Link() {
             super();
         }
@@ -260,14 +260,14 @@ public class Force<T, L> extends JavaScriptObject {
         /**
          * @return link datum
          */
-        public final native L datum() /*-{
+        public final native LinkDatum datum() /*-{
 			return this.datum;
         }-*/;
 
         /**
          * @param datum the user datum of this node
          */
-        public final native void datum(final L datum)/*-{
+        public final native void datum(final LinkDatum datum)/*-{
 			this.datum = datum;
         }-*/;
     }
@@ -294,7 +294,7 @@ public class Force<T, L> extends JavaScriptObject {
      *            to set
      * @return the force layout object.
      */
-    public final native Force<T, L> size(Array<Double> size) /*-{
+    public final native Force<T, LinkDatum> size(Array<Double> size) /*-{
 		return this.size(size);
     }-*/;
 
@@ -310,7 +310,7 @@ public class Force<T, L> extends JavaScriptObject {
      * @param height
      * @return the force layout object.
      */
-    public final native Force<T, L> size(double width, double height) /*-{
+    public final native Force<T, LinkDatum> size(double width, double height) /*-{
 		return this.size([ width, height ]);
     }-*/;
 
@@ -330,7 +330,7 @@ public class Force<T, L> extends JavaScriptObject {
      *            to set
      * @return the force layout object.
      */
-    public final native Force<T, L> linkDistance(double distance) /*-{
+    public final native Force<T, LinkDatum> linkDistance(double distance) /*-{
 		return this.linkDistance(distance);
     }-*/;
 
@@ -346,7 +346,7 @@ public class Force<T, L> extends JavaScriptObject {
      *            document
      * @return the force layout object.
      */
-    public final native Force<T, L> linkDistance(DatumFunction<Double> callback) /*-{
+    public final native Force<T, LinkDatum> linkDistance(DatumFunction<Double> callback) /*-{
 		try {
 			return this
 					.linkDistance(function(d, i) {
@@ -375,7 +375,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> linkStrength(double strength) /*-{
+    public final native Force<T, LinkDatum> linkStrength(double strength) /*-{
 		return this.linkStrength(strength);
     }-*/;
 
@@ -388,7 +388,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> linkStrength(DatumFunction<Double> callback) /*-{
+    public final native Force<T, LinkDatum> linkStrength(DatumFunction<Double> callback) /*-{
 		try {
 			return this
 					.linkStrength(function(d, i) {
@@ -423,7 +423,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> friction(double friction) /*-{
+    public final native Force<T, LinkDatum> friction(double friction) /*-{
 		return this.friction(friction);
     }-*/;
 
@@ -446,7 +446,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> charge(double x) /*-{
+    public final native Force<T, LinkDatum> charge(double x) /*-{
 		return this.charge(x);
     }-*/;
 
@@ -466,7 +466,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> charge(DatumFunction<Double> callback) /*-{
+    public final native Force<T, LinkDatum> charge(DatumFunction<Double> callback) /*-{
 		try {
 			return this
 					.charge(function(d, i) {
@@ -498,7 +498,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> chargeDistance(double x) /*-{
+    public final native Force<T, LinkDatum> chargeDistance(double x) /*-{
 		return this.chargeDistance(x);
     }-*/;
 
@@ -526,7 +526,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> theta(double x) /*-{
+    public final native Force<T, LinkDatum> theta(double x) /*-{
 		return this.theta(x);
     }-*/;
 
@@ -558,7 +558,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> gravity(double x) /*-{
+    public final native Force<T, LinkDatum> gravity(double x) /*-{
 		return this.gravity(x);
     }-*/;
 
@@ -591,7 +591,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final Force<T, L> nodes(final List<Node<T>> nodes) {
+    public final Force<T, LinkDatum> nodes(final List<Node<T>> nodes) {
         return this.nodes(Array.fromIterable(nodes));
     }
 
@@ -604,7 +604,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> nodes(Array<Node<T>> nodes) /*-{
+    public final native Force<T, LinkDatum> nodes(Array<Node<T>> nodes) /*-{
 		return this.nodes(nodes);
     }-*/;
     
@@ -615,26 +615,27 @@ public class Force<T, L> extends JavaScriptObject {
      * @param data
      * @return
      */
-    public final native Array<Link<T,L>> linksFromData(final Array<L> data) /*-{
+    public final native Array<Link<T,LinkDatum>> linksFromData(final Array<LinkDatum> data) /*-{
 		
 		finalLinks = [];    	
 		for(i = 0; i < data.length; i++) { 
 			finalLinks[i] = {
 				datum: data[i],
-				source: data[i].source,
-				target: data[i].target
+				source: data[i].@com.github.gwtd3.api.layout.LinkDatum::getSourceId()(),
+				target: data[i].@com.github.gwtd3.api.layout.LinkDatum::getTargetId()()
 			}
+			console.log( "finalLinks[i].target:" + finalLinks[i].target );
 		}
 		this.links(finalLinks);
 
 		return this.links()
 	}-*/;
-
+    
     /**
      *
      * @return the links current array, which defaults to the empty array.
      */
-    public final native Array<Link<T,L>> links() /*-{
+    public final native Array<Link<T,LinkDatum>> links() /*-{
 		return this.links();
     }-*/;
 
@@ -648,7 +649,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> links(Array<Link<T,L>> links) /*-{
+    public final native Force<T, LinkDatum> links(Array<Link<T,LinkDatum>> links) /*-{
 		return this.links(links);
     }-*/;
     
@@ -681,7 +682,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> start() /*-{
+    public final native Force<T, LinkDatum> start() /*-{
 		return this.start();
     }-*/;
 
@@ -702,7 +703,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> alpha(double x) /*-{
+    public final native Force<T, LinkDatum> alpha(double x) /*-{
 		return this.alpha(x);
     }-*/;
 
@@ -722,7 +723,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> resume() /*-{
+    public final native Force<T, LinkDatum> resume() /*-{
 		return this.resume();
     }-*/;
 
@@ -742,7 +743,7 @@ public class Force<T, L> extends JavaScriptObject {
      *
      * @return the force layout object.
      */
-    public final native Force<T, L> stop() /*-{
+    public final native Force<T, LinkDatum> stop() /*-{
 		return this.stop();
     }-*/;
 
